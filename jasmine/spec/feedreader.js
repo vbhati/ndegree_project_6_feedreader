@@ -141,18 +141,21 @@ $(function() {
     });
 
 
-    /* TODO: Write a new test suite named "Initial Entries" */
+    /* Write a new test suite named "Initial Entries" */
     describe('Initial Entries', function() {
-        /* TODO: Write a test that ensures when the loadFeed
+        /* Write a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
          * a single .entry element within the .feed container.
          * Remember, loadFeed() is asynchronous so this test wil require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
+
+        //  for asynchronous call
         beforeEach(function(done) {
             loadFeed(0,done);
         });
 
+        // check if container(.feed) have any childrens (.entry)
         it('does exists', function(done) {
             var container = $('.feed');
             expect(container.children().length).toBeGreaterThan(0);
@@ -160,11 +163,37 @@ $(function() {
         });
     });
 
-    /* TODO: Write a new test suite named "New Feed Selection"
-
-        /* TODO: Write a test that ensures when a new feed is loaded
+    /* TODO: Write a new test suite named "New Feed Selection" */
+    describe('New Feed Selection', function() {
+        var oldTitle, newTitle, container;
+        /* Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+
+         /*
+            To test above scenario we are passing the index 1 that should load CSS feeds.
+            Added setTimout to see it functioning.
+            To make sure it actually changes contents I have used ".header-title" value.
+            If content changes title changes vice versa.
+            Modify url (CSS tricks) for testing.
+         */
+
+        //  for asynchronous call and to fetch initial feed title
+        beforeEach(function(done) {
+            oldTitle = $('.header-title').text();
+            setTimeout(function() {
+                loadFeed(1,done);
+            },1000);
+        });
+
+        // compare old title with new title after calling loadFeed
+        it('does changes contents', function(done) {
+            container = $('.feed');
+            newTitle = $('.header-title').text();
+            expect(oldTitle).not.toBe(newTitle);
+            done();
+        });
+    });
 
 }());
