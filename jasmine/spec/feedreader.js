@@ -33,26 +33,13 @@ $(function() {
          */
         it('URL is not empty or null', function() {
             for(var i = 0; i < allFeeds.length ; i++) {
-                /*
-                    check if url is defined for particular feed
-                    test scenario: {
-                        name: 'CSS Tricks'
-                        //removed url
-                    }
-                */
+                //check if url is defined for particular feed
                 expect(allFeeds[i].url).toBeDefined();
-                /*
-                    check if url is null
-                    test scenario:
-                        url: null
-                */
+
+                //check if url is null
                 expect(allFeeds[i].url).not.toBeNull();
 
-                /*
-                    check if url is blank or empty
-                    test scenario:
-                        url: '' OR url: ""
-                */
+                //check if url is blank or empty
                 expect(allFeeds[i].url.length).not.toBe(0);
             }
          });
@@ -63,26 +50,13 @@ $(function() {
          */
         it('Name is not empty or null', function() {
             for(var i = 0; i < allFeeds.length ; i++) {
-                /*
-                    check if name is defined for particular feed
-                    test scenario: {
-                        // removed name
-                        url: 'http://css-tricks.com/feed'
-                    }
-                */
+                //check if name is defined for particular feed
                 expect(allFeeds[i].name).toBeDefined();
-                /*
-                    check if name is null
-                    test scenario:
-                        name: null
-                */
+
+                //check if name is null
                 expect(allFeeds[i].name).not.toBeNull();
 
-                /*
-                    check if name is blank or empty
-                    test scenario:
-                        name: '' OR name: ""
-                */
+                //check if name is blank or empty
                 expect(allFeeds[i].name.length).not.toBe(0);
             }
         });
@@ -100,27 +74,14 @@ $(function() {
             menuIcon = $('.menu-icon-link');
         });
 
-        // get values after each spec is ran
-        afterEach(function() {
-            bodyClass = $('body').attr('class');
-        });
-
         /* A test that ensures the menu element is
          * hidden by default.
          */
         it('is hidden', function() {
-
-            //Menu will be hidden if class value of body element is "menu-hidden"
-
-            //get the class value of body element
-            var bodyClass = $('body').attr('class');
-
             //check whether body has class attribute defined
             expect(bodyClass).toBeDefined();
             //check whether body class attibute has value "menu-hidden"
             expect(bodyClass).toBe("menu-hidden");
-            //check if body class attribute value is missing/empty. This spec can be skipped.
-            expect(bodyClass.length).not.toBe(0);
         });
 
         /*  A test that ensures the menu changes
@@ -129,13 +90,17 @@ $(function() {
           * clicked and does it hide when clicked again.
         */
         it('appears when clicked', function() {
+            // this click will call menuIcon.click from app.js which will toggle the value of bodyclass
             menuIcon.click();
-            expect(bodyClass).toBe("menu-hidden");
+            // fetch new value of bodyClass after click event. In this case it wil be blank/empty since menu appears
+            bodyClass = $('body').attr('class');
+            expect(bodyClass).toBe("");
         });
 
         it('disappears when clicked again', function() {
             menuIcon.click();
-            expect(bodyClass).toBe("");
+            bodyClass = $('body').attr('class');
+            expect(bodyClass).toBe("menu-hidden");
         });
 
     });
@@ -156,14 +121,13 @@ $(function() {
         });
 
         // check if container(.feed) have any childrens (.entry)
-        it('does exists', function(done) {
+        it('does exists', function() {
             var container = $('.feed');
             expect(container.children().length).toBeGreaterThan(0);
-            done();
         });
     });
 
-    /* TODO: Write a new test suite named "New Feed Selection" */
+    /* Write a new test suite named "New Feed Selection" */
     describe('New Feed Selection', function() {
         var oldTitle, newTitle, container;
         /* Write a test that ensures when a new feed is loaded
@@ -171,28 +135,20 @@ $(function() {
          * Remember, loadFeed() is asynchronous.
          */
 
-         /*
-            To test above scenario we are passing the index 1 that should load CSS feeds.
-            Added setTimout to see it functioning.
-            To make sure it actually changes contents I have used ".header-title" value.
-            If content changes title changes vice versa.
-            Modify url (CSS tricks) for testing.
-         */
-
         //  for asynchronous call and to fetch initial feed title
         beforeEach(function(done) {
             oldTitle = $('.header-title').text();
-            setTimeout(function() {
+            // the reason of adding setTimeout is to actually see changes in UI after 1sec
+            // It is not from Jasmine documentation. I added this for only testing purposes. Commenting out for review.
+            //setTimeout(function() {
                 loadFeed(1,done);
-            },1000);
+            //},1000);
         });
 
         // compare old title with new title after calling loadFeed
-        it('does changes contents', function(done) {
-            container = $('.feed');
+        it('does changes contents', function() {
             newTitle = $('.header-title').text();
             expect(oldTitle).not.toBe(newTitle);
-            done();
         });
     });
 
